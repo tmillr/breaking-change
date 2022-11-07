@@ -1,0 +1,25 @@
+name: 'Report Breaking Changes'
+author: 'Tyler Miller'
+description: 'Automatically update an issue and/or discussion with breaking changes.'
+inputs:
+  token:
+    description: 'The token used for posting the comments (e.g. github.token)'
+    required: true
+  issueNumber:
+    description: 'Issue to comment on for each breaking change commit found. May be combined with discussionNumber.'
+    required: false
+    default: ''
+  discussionNumber:
+    description: 'Discussion to comment on for each breaking change commit found. May be combined with issueNumber.'
+    required: false
+    default: ''
+  headerLevel:
+    description: 'Header level for the commit message title/subject (1-6, or false to disable header styling of commit title).'
+    required: false
+    default: '3'
+runs:
+  using: 'node16'
+  main: 'index.js'
+branding:
+  icon: 'cast'
+  color: 'red'
