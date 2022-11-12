@@ -6,8 +6,8 @@
   "type": "module",
   "scripts": {
     "build": "ncc build src/index.js -m -o . --license NOTICE.txt && git restore package.json && node scripts/notice.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "preversion": "git pull && npm run build",
+    "test": "ava",
+    "preversion": "git pull && npm ci && npm run build && npm t",
     "version": "git add .",
     "release": "bash ./scripts/version.sh"
   },
@@ -27,6 +27,7 @@
     "@vercel/ncc": "^0.34.0"
   },
   "devDependencies": {
+    "ava": "^5.0.1",
     "prettier": "^2.7.1"
   }
 }

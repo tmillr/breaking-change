@@ -1,68 +1,37 @@
 import assert from "node:assert/strict";
 import github from "@actions/github";
 import core from "@actions/core";
+import {
+  getOctokit,
+  filterFn,
+  humanReadableTypeOf,
+  inputWasProvided,
+} from "./utils.js";
+
+let foundBreakingChange = false;
+let error;
 
 try {
-  const getIssueOrDiscussionId = (() => {
-    const cache = {};
-
-    return async (repoOwner, repoName, number, which) => {
-      cache[which] ??= (
-        await octokit.graphql(
-          `
-            query($owner: String!, $name: String!, $number: Int!) {
-              repository(owner: $owner, name: $name) {
-                ${which}(number: $number) {
-                  id
-                }
-              }
-            }
-`,
-          { owner: repoOwner, name: repoName, number }
-        )
-      ).repository[which].id;
-
-      return cache[which];
-    };
-  })();
-
-  /*
-   * @param {{ body: string, clientMutationId?: string, subjectId: string }} input
-   */
-  async function addIssueComment(input) {
-    return (
-      await octokit.graphql(
-        `
-          mutation ($input: AddCommentInput!) {
-            addComment(input: $input) {
-              commentEdge {
-                node {
-                  url
-                }
-              }
-            }
-          }
-`,
-        { input }
-      )
-    ).addComment.commentEdge.node.url;
-  }
-
-  /** Filters out non-breaking-change commits based on their message */
-  const filterFn = (msg) =>
-    /^[^:]+!:/u.test(msg.trim().split("\n")[0]) || /^\s*BREAKING/mu.test(msg);
-
-  const token = core.getInput("token", {
-    required: true,
-    trimWhitespace: false,
-  });
-
   const { repo, eventName, payload } = github.context;
   const owner = repo.owner;
   const name = repo.repo;
-  const octokit = github.getOctokit(token);
+  const octokit = getOctokit();
 
-  /* Begin Validation */
+  const commits = (() => {
+    const ret = payload.commits;
+    assert(ret !== undefined, 'missing "commits" field of event payload ');
+
+    assert(
+      Array.isArray(ret),
+      `"commits" field of event payload is the wrong type: expected "Array", found "${humanReadableTypeOf(
+        ret
+      )}"`
+    );
+
+    return ret.filter((cm) => filterFn(cm.message));
+  })();
+
+  /*** Begin Validation ***/
 
   if (eventName !== "push") {
     core.warning(`This action only works with "push" events`, {
@@ -88,24 +57,24 @@ try {
   });
 
   assert(
-    issueNumber || discussionNumber,
+    inputWasProvided(issueNumber) || inputWasProvided(discussionNumber),
     'missing input: one or both of "discussionNumber" or "issueNumber" must be provided'
   );
 
-  if (issueNumber) {
+  if (inputWasProvided(issueNumber)) {
     assert(
       /^\d+$/.test(issueNumber),
-      'invalid input: "issueNumber" is not a valid integer'
+      'invalid input provided for "issueNumber": not a valid integer'
     );
 
     issueNumber = parseInt(issueNumber, 10);
   }
 
-  if (discussionNumber) {
+  if (inputWasProvided(discussionNumber)) {
     assert(
       /^\d+$/.test(
         discussionNumber,
-        'invalid input: "discussionNumber" is not a valid integer'
+        'invalid input provided for "discussionNumber": not a valid integer'
       )
     );
 
@@ -115,57 +84,48 @@ try {
   let commitTitlePrefix = "";
 
   if (/^(?:false|0)$/i.test(headerLevel)) {
+    // no-op
   } else if (/^true$/i.test(headerLevel)) {
     commitTitlePrefix = "#".repeat(3) + " ";
   } else {
     assert(
       /^[123456]$/.test(headerLevel),
-      `invalid input: "headerLevel" must be an integer between 1 and 6 inclusive, or "false"`
+      `invalid input provided for "headerLevel": expected an integer between 1 and 6 inclusive, or "false"`
     );
 
     commitTitlePrefix = "#".repeat(parseInt(headerLevel, 10)) + " ";
   }
 
-  /* End Validation */
-
-  const commits = payload.commits.filter((cm) => filterFn(cm.message));
+  /*** End Validation ***/
 
   // NOTE: the order of requests (comments) is important here!
   // TODO: logging/summary and/or outputs of results or note lack thereof
   for (const commit of commits) {
-    let body = commit.message.trim();
-    body += `###### Breaking Change ${commit.id}\n${commitTitlePrefix}`;
+    foundBreakingChange = true;
+    const body = `###### Breaking Change ${
+      commit.id
+    }\n${commitTitlePrefix}${commit.message.trim()}`;
 
     if (typeof issueNumber == "number")
-      await addIssueComment({
-        body,
-        subjectId: getIssueOrDiscussionId(owner, name, issueNumber, "issue"),
-      });
+      await octokit.addIssueComment(
+        await octokit.getIssueOrDiscussionId(owner, name, issueNumber, "issue"),
+        body
+      );
 
     if (typeof discussionNumber == "number")
-      await octokit.graphql(
-        `
-          mutation ($input: AddDiscussionCommentInput!) {
-            addDiscussionComment(input: $input) {
-              comment {
-                url
-              }
-            }
-          }
-  `,
-        {
-          input: {
-            body: body,
-            discussionId: getIssueOrDiscussionId(
-              owner,
-              name,
-              discussionNumber,
-              "discussion"
-            ),
-          },
-        }
+      await octokit.addDiscussionComment(
+        await octokit.getIssueOrDiscussionId(
+          owner,
+          name,
+          discussionNumber,
+          "discussion"
+        ),
+        body
       );
   }
-} catch (err) {
-  core.setFailed(err.message);
+} catch (e) {
+  error = e;
+} finally {
+  if (foundBreakingChange) core.setOutput("found", foundBreakingChange);
+  if (error) core.setFailed(error.message);
 }

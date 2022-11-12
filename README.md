@@ -14,10 +14,9 @@ This GitHub action automatically detects breaking changes by scanning the messag
       token: ${{ github.token }}
       # Issue and/or discussion # where breaking changes will be reported
       issueNumber: 1
-      discussionNumber: 1
 ```
 
-Also see [action.yml](action.yml)
+See [action.yml](action.yml) for all possible inputs and outputs.
 
 ## Tips
 
