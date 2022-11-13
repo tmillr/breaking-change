@@ -1,6 +1,6 @@
 {
   "name": "breaking-change",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Automatically update an issue and/or discussion with breaking changes.",
   "main": "index.js",
   "type": "module",
