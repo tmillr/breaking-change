@@ -28,7 +28,9 @@ export function getOctokit(
 
       return async function (repoOwner, repoName, number, which) {
         const x = `${repoOwner} ${repoName} ${number} ${which}`;
-        if (x in cache) return await defer(cache[x]);
+
+        if ({}.constructor.prototype.hasOwnProperty.call(cache, x))
+          return cache[x];
 
         return (cache[x] = (
           await this.graphql(
@@ -100,14 +102,6 @@ export function getOctokit(
   }
 
   return octokit;
-}
-
-export function defer(val) {
-  return new Promise((resolve, reject) => {
-    queueMicrotask(() => {
-      resolve(val);
-    });
-  });
 }
 
 export function inputWasProvided(input) {
