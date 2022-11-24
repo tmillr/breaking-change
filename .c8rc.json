@@ -1,1 +1,5 @@
-{ "all": true, "exclude": "webpack:**" }
+{
+  "all": true,
+  "exclude": ["webpack:**", "**/*{.,-}spec.*"],
+  "exclude-after-remap": true
+}
