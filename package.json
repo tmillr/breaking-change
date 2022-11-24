@@ -8,9 +8,9 @@
     "node": "16"
   },
   "scripts": {
-    "build": "ncc build \"src/index.js\" \"-sm\" \"--license\" \"NOTICE.txt\"",
+    "build": "ncc build \"src/index.js\" \"-sm\" \"--no-source-map-register\" \"--license\" \"NOTICE.txt\"",
     "postbuild": "sh \"scripts/postbuild.sh\"",
-    "test": "c8 ava",
+    "test": "sh \"scripts/test.sh\"",
     "preversion": "git pull && npm ci && npm run build && npm t",
     "version": "git add \"-A\"",
     "release": "sh \"./scripts/version.sh\""
