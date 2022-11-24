@@ -14,7 +14,10 @@ jobs:
     - uses: actions/setup-node@v3
       with:
         node-version-file: package.json
+        check-latest: true
     - run: npm ci
     - run: npm run build --if-present
     - run: npm test
+      with:
+        token: ${{ github.token }}
 
