@@ -4,13 +4,16 @@
   "description": "Automatically update an issue and/or discussion with breaking changes.",
   "main": "index.js",
   "type": "module",
+  "engines": {
+    "node": "16"
+  },
   "scripts": {
     "build": "ncc build \"src/index.js\" \"-m\" \"--license\" \"NOTICE.txt\"",
     "postbuild": "sh \"scripts/postbuild.sh\"",
     "test": "ava",
     "preversion": "git pull && npm ci && npm run build && npm t",
     "version": "git add \"-A\"",
-    "release": "bash \"./scripts/version.sh\""
+    "release": "sh \"./scripts/version.sh\""
   },
   "repository": {
     "type": "git",

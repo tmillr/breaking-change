@@ -1,0 +1,20 @@
+name: Test
+
+on:
+  push:
+    branches: [ 'master' ]
+  pull_request:
+    branches: [ 'master', 'v[0-9]*' ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version-file: package.json
+    - run: npm ci
+    - run: npm run build --if-present
+    - run: npm test
+
