@@ -20,3 +20,5 @@ jobs:
     - run: npm test
       env:
         INPUT_TOKEN: ${{ github.token }}
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
