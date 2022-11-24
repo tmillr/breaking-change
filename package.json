@@ -8,9 +8,9 @@
     "node": "16"
   },
   "scripts": {
-    "build": "ncc build \"src/index.js\" \"-m\" \"--license\" \"NOTICE.txt\"",
+    "build": "ncc build \"src/index.js\" \"-sm\" \"--license\" \"NOTICE.txt\"",
     "postbuild": "sh \"scripts/postbuild.sh\"",
-    "test": "ava",
+    "test": "c8 ava",
     "preversion": "git pull && npm ci && npm run build && npm t",
     "version": "git add \"-A\"",
     "release": "sh \"./scripts/version.sh\""
@@ -30,8 +30,9 @@
     "@actions/github": "5.1.1"
   },
   "devDependencies": {
+    "@vercel/ncc": "0.34.0",
     "ava": "5.0.1",
-    "prettier": "2.7.1",
-    "@vercel/ncc": "0.34.0"
+    "c8": "7.12.0",
+    "prettier": "2.7.1"
   }
 }
