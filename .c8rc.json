@@ -1,5 +1,6 @@
 {
   "all": true,
   "exclude": ["webpack:**", "**/*{.,-}spec.*"],
-  "exclude-after-remap": true
+  "exclude-after-remap": true,
+  "reporter": ["lcov"]
 }
