@@ -2,7 +2,7 @@ import path from "node:path";
 import os from "node:os";
 import { writeFile, mkdtemp, rm, readFile } from "node:fs/promises";
 import test from "ava";
-import { execaNode } from "execa";
+import { execa } from "execa";
 import yaml from "js-yaml";
 
 const token = process.env.GITHUB_TOKEN || "abcd";
@@ -37,11 +37,12 @@ test.before(async (t) => {
       inputs = { ...inputs };
 
       for (const [k, v] of Object.entries(this.actionYAML.inputs))
-        inputs["INPUT_" + k.toUpperCase()] = hasKey(inputs, k)
-          ? inputs[k]
-          : hasKey(v, "default")
-          ? v.default
-          : "";
+        if (!hasKey(inputs, k) && hasKey(v, "default")) inputs[k] = v.default;
+
+      for (const [k, v] of Object.entries(inputs)) {
+        delete inputs[k];
+        inputs["INPUT_" + k.toUpperCase()] = v;
+      }
 
       return inputs;
     }
@@ -55,14 +56,19 @@ test.before(async (t) => {
       for (const [k, v] of Object.entries(this.inputs))
         if (!hasKey(ctx.inputs, k)) ctx.inputs[k] = v;
 
-      return await execaNode("index.js", [], {
-        env: {
-          GITHUB_REPOSITORY: ctx.repo,
-          GITHUB_EVENT_PATH: await mockEventPayload(ctx.payload),
-          GITHUB_EVENT_NAME: ctx.event,
-          ...this.resolveInputs(ctx.inputs),
-        },
-      });
+      return await execa(
+        process.execPath,
+        [...process.execArgv, path.resolve(this.actionYAML.runs.main)],
+        {
+          timeout: 60000,
+          env: {
+            GITHUB_REPOSITORY: ctx.repo,
+            GITHUB_EVENT_PATH: await mockEventPayload(ctx.payload),
+            GITHUB_EVENT_NAME: ctx.event,
+            ...this.resolveInputs(ctx.inputs),
+          },
+        }
+      );
     }
   }
 
