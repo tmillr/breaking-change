@@ -1,3 +1,4 @@
+set -v -e -o pipefail
 rm 'dist/package.json'
 mv -f dist/* .
 f="$(cat 'NOTICE.txt')"

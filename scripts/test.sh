@@ -1,3 +1,4 @@
+set -v -e -o pipefail
 c8='./node_modules/.bin/c8'
 ava='./node_modules/.bin/ava'
 
