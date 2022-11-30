@@ -17,6 +17,14 @@ try {
   const name = repo.repo;
   const octokit = getOctokit();
 
+  if (eventName !== "push") {
+    core.warning(`This action only works with "push" events`, {
+      title: `Unsupported Event "${eventName}"`,
+    });
+
+    process.exit(0);
+  }
+
   const commits = (() => {
     const ret = payload.commits;
     assert(ret !== undefined, 'missing "commits" field of event payload ');
@@ -32,14 +40,6 @@ try {
   })();
 
   /*** Begin Validation ***/
-
-  if (eventName !== "push") {
-    core.warning(`This action only works with "push" events`, {
-      title: `Unsupported Event "${eventName}"`,
-    });
-
-    process.exit(0);
-  }
 
   let issueNumber = core.getInput("issueNumber", {
     required: false,
