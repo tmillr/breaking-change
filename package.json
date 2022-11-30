@@ -9,11 +9,11 @@
   },
   "scripts": {
     "build": "ncc build \"src/index.js\" \"-sm\" \"--no-source-map-register\" \"--license\" \"NOTICE.txt\"",
-    "postbuild": "sh \"scripts/postbuild.sh\"",
-    "test": "sh \"scripts/test.sh\"",
+    "postbuild": "bash \"scripts/postbuild.sh\"",
+    "test": "bash \"scripts/test.sh\"",
     "preversion": "git pull && npm ci && npm run build && npm t",
     "version": "git add \"-A\"",
-    "release": "sh \"./scripts/version.sh\""
+    "release": "bash \"./scripts/version.sh\""
   },
   "repository": {
     "type": "git",
