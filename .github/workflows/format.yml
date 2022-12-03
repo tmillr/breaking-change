@@ -53,4 +53,4 @@ jobs:
 
     - name: Signal Formatting Errors
       if: env.HAS_CHANGES
-      run: echo '::error::Commit has formatting errors'
+      run: echo '::error::Commit has formatting errors'; exit 1
