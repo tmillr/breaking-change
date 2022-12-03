@@ -1,0 +1,56 @@
+name: Format
+
+on:
+  push:
+#     branches: [ 'master', 'main', 'v[0-9]*' ]
+  pull_request:
+#     branches: [ 'master', 'main', 'v[0-9]*' ]
+
+jobs:
+  format:
+    if: github.event_name != 'push' || !github.event.deleted
+    runs-on: ubuntu-latest
+    env:
+      npm_config_engine_strict: true
+    steps:
+    # NOTE: Be mindful of what gets checked-out for pr events!
+    - uses: actions/checkout@v3
+
+    - uses: actions/setup-node@v3
+      with:
+        node-version-file: package.json
+        check-latest: true
+
+    - name: Install Dependencies
+      run: npm ci
+
+    - name: Format Files
+      run: npm run format
+        
+    - name: Log Diff of Formatting Errors
+      run: |
+        git add -A
+
+        cat >> "$GITHUB_STEP_SUMMARY" <<-EOF
+        # Diff
+
+        \`\`\`diff
+        $(if git diff --staged --exit-code; then echo 'No changes.'; else echo 'HAS_CHANGES=1' >> "$GITHUB_ENV"; fi)
+        \`\`\`
+        EOF
+
+    - name: Create Pull Request
+      uses: peter-evans/create-pull-request@v4
+      if: github.event_name != 'pull_request'
+      with:
+        branch: pr/${{ github.ref_name }}/format
+        title: 'fmt: format files with prettier'
+        body: Automated pull request
+        commit-message: 'fmt: format files with prettier'
+        delete-branch: true
+
+    - name: Signal Formatting Errors
+      if: env.HAS_CHANGES
+      run: |
+        echo '::error::Commit has formatting errors'
+        exit 1
