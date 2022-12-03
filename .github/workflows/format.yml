@@ -35,6 +35,8 @@ jobs:
         # Diff
 
         \`\`\`diff
+        $(git diff --staged --name-status)
+
         $(if git diff --staged --exit-code; then echo 'No changes.'; else echo 'HAS_CHANGES=1' >> "$GITHUB_ENV"; fi)
         \`\`\`
         EOF
@@ -51,6 +53,4 @@ jobs:
 
     - name: Signal Formatting Errors
       if: env.HAS_CHANGES
-      run: |
-        echo '::error::Commit has formatting errors'
-        exit 1
+      run: echo '::error::Commit has formatting errors'
