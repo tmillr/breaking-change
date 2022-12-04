@@ -34,11 +34,11 @@ jobs:
         cat >> "$GITHUB_STEP_SUMMARY" <<-EOF
         # Diff
 
-        \`\`\`diff
+        ~~~~~~~~~diff
         $(git diff --staged --name-status)
 
         $(if git diff --staged --exit-code; then echo 'No changes.'; else echo 'HAS_CHANGES=1' >> "$GITHUB_ENV"; fi)
-        \`\`\`
+        ~~~~~~~~~
         EOF
 
     - name: Create Pull Request
