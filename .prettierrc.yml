@@ -1,4 +1,4 @@
 overrides:
-  - files: [ '*.yml', '*.yaml' ]
+  - files: ['*.yml', '*.yaml']
     options:
       singleQuote: true

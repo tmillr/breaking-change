@@ -5,7 +5,10 @@ const json = JSON.parse(await readFile(file, "utf8"));
 
 json.sources = json.sources.map((path) =>
   path.replace(
-    new RegExp(`^(?:\\.\\.?[\\\\/])*webpack:[\\\\/]*(?:breaking-change[\\\\/])?`, "u"),
+    new RegExp(
+      `^(?:\\.\\.?[\\\\/])*webpack:[\\\\/]*(?:breaking-change[\\\\/])?`,
+      "u"
+    ),
     ""
   )
 );
