@@ -7,15 +7,15 @@ This GitHub action automatically detects breaking changes by scanning the messag
 ## Usage
 
 ```yaml
-  - name: Report Breaking Changes
-    uses: tmillr/breaking-change@v1
-    # Only trigger on push events occurring on your release branch
-    if: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
-    with:
-      # The token that will be used for posting the comments
-      token: ${{ github.token }}
-      # Issue and/or discussion # where breaking changes will be reported
-      issueNumber: 1
+- name: Report Breaking Changes
+  uses: tmillr/breaking-change@v1
+  # Only trigger on push events occurring on your release branch
+  if: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
+  with:
+    # The token that will be used for posting the comments
+    token: ${{ github.token }}
+    # Issue and/or discussion # where breaking changes will be reported
+    issueNumber: 1
 ```
 
 See [action.yml](action.yml) for all possible inputs and outputs.

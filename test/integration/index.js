@@ -118,4 +118,3 @@ test(`if event != "push": don't error but quickly bail/exit 0 and print warning`
     /^\s*::\s*warning.*(?:title=|::)\s*unsupported\s*event/iu
   );
 });
-
