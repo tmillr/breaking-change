@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  push:
+
+jobs:
+  # Some CI jobs...
+  # ...
+  # ...
+  # ...
+  report-breaking-changes:
+    # Only trigger job on push events occurring on your release branch
+    if: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Report Breaking Changes
+        uses: tmillr/breaking-change@v{{CURRENT_MAJOR}}
+        # Only trigger step on push events occurring on your release branch
+        if: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
+        with:
+          # The token to be used for posting the comments
+          token: ${{ github.token }}
+          # Issue and/or discussion number where breaking changes should be reported
+          issueNumber: 1
+          discussionNumber: 2
