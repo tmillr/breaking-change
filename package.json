@@ -2,12 +2,15 @@
   "name": "breaking-change",
   "version": "1.0.0",
   "description": "Automatically update an issue and/or discussion with breaking changes.",
+  "author": "Tyler Miller",
+  "license": "MIT",
   "main": "index.js",
   "type": "module",
   "engines": {
     "node": "16"
   },
   "scripts": {
+    "build-docs": "node \"scripts/build-docs.js\"",
     "build": "ncc build \"src/index.js\" \"-sm\" \"--no-source-map-register\" \"--license\" \"NOTICE.txt\"",
     "postbuild": "bash \"scripts/postbuild.sh\"",
     "test": "bash \"scripts/test.sh\"",
@@ -20,8 +23,6 @@
     "type": "git",
     "url": "git+https://github.com/tmillr/breaking-change.git"
   },
-  "author": "Tyler Miller",
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/tmillr/breaking-change/issues"
   },
