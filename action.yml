@@ -11,21 +11,30 @@ branding:
 
 inputs:
   token:
-    description: 'The token used for posting the comments (e.g. github.token)'
+    description: The token used for posting the comments (e.g. github.token).
     required: true
   issueNumber:
-    description: 'Issue to comment on for each breaking change commit found. May be combined with discussionNumber.'
+    description: >
+      (integer)
+      Issue to comment on for each breaking change commit found.
+      May be combined with discussionNumber.
     required: false
     default: ''
   discussionNumber:
-    description: 'Discussion to comment on for each breaking change commit found. May be combined with issueNumber.'
+    description: >
+      (integer)
+      Discussion to comment on for each breaking change commit found.
+      May be combined with issueNumber.
     required: false
     default: ''
   headerLevel:
-    description: 'Header level for the commit message title/subject (1-6, or false to disable header styling of commit title).'
+    description: >
+      (integer)
+      Header level for the commit message title/subject (1-6, or false to
+      disable header styling of commit title).
     required: false
     default: '3'
 
 outputs:
   found:
-    description: '(boolean) Whether a breaking change was detected.'
+    description: (boolean) Whether a breaking change was detected.
