@@ -1,0 +1,38 @@
+# Update major version tracking branches/refs, if needed.
+# Does not support updating a ref to a prior version.
+
+on:
+  release:
+    types: [ released ]
+
+jobs:
+  update-version-refs:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - env:
+        NEW_TAG: ${{ github.event.release.tag_name }}
+      run: |
+        # Exit with error if the released tag is not semantic version tag
+        npx --yes semver "$NEW_TAG" || exit 1
+
+        major="${NEW_TAG%%.*}"
+        br="$(git ls-remote origin "refs/heads/$major")"
+        update=true
+
+        # If version-tracking branch exists for $major...
+        if [ -n "$br" ]; then
+          br_sha="${br%%[[:space:]]*}"
+
+          # Iterate over tags of branch head commit
+          while read -r tag_sha tag
+          do
+            tag="${tag##*'refs/tags/'}"
+            tag="${tag%%'^{'*}"
+
+            # Fails if invalid version or doesn't match range
+            if npx semver -r ">${NEW_TAG}" "$tag"; then update=false; break; fi
+          done <<< "$(git ls-remote --tags origin | grep -E "$br_sha"'.*refs/tags/v?[[:digit:]]')"
+        fi
+
+        "$update" && git push origin "refs/tags/${NEW_TAG}^{commit}:refs/heads/${major}"
