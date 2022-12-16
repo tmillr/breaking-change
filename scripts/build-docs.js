@@ -66,7 +66,7 @@ ${usageFile
         `\`${key}\``,
         val.description || "",
         `\`${!!val.required}\``,
-        val.default.toString() ? `\`${val.default}\`` : "",
+        val.default?.toString() ? `\`${val.default}\`` : "",
       ]);
 
     return toMarkdownTable(table);
