@@ -36,7 +36,7 @@ jobs:
         # Diff
 
         ~~~~~~~~~diff
-        ${files:-'No changes.'}
+        ${files:-No changes.}
 
         $(git diff --staged --exit-code ||
           { echo 'HAS_CHANGES=1' >> "$GITHUB_ENV"; })
@@ -90,7 +90,7 @@ jobs:
         # Diff
 
         ~~~~~~~~~diff
-        ${files:-'No changes.'}
+        ${files:-No changes.}
 
         $(git diff --staged --exit-code ||
           { echo 'HAS_CHANGES=1' >> "$GITHUB_ENV"; })
