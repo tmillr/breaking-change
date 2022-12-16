@@ -1,0 +1,114 @@
+name: Format and Docs
+
+on:
+  push:
+#     branches: [ 'master', 'main', 'v[0-9]*' ]
+  pull_request:
+#     branches: [ 'master', 'main', 'v[0-9]*' ]
+
+jobs:
+  format:
+    if: github.event_name != 'push' || !github.event.deleted
+    runs-on: ubuntu-latest
+    env:
+      npm_config_engine_strict: true
+    steps:
+    # NOTE: Be mindful of what gets checked-out for pr events!
+    - uses: actions/checkout@v3
+
+    - uses: actions/setup-node@v3
+      with:
+        node-version-file: package.json
+        check-latest: true
+
+    - run: npm ci
+    - run: npm run format
+
+    - name: Log Summary/Diff
+      id: diff
+      run: |
+        git add -A
+        files="$(git diff --staged --name-status)"
+        delim="$RANDOM"
+        printf '%s\n%s\n%s\n' "files<<$delim" "$files" "$delim" >> "$GITHUB_OUTPUT"
+
+        cat >> "$GITHUB_STEP_SUMMARY" <<-EOF
+        # Diff
+
+        ~~~~~~~~~diff
+        ${files:-'No changes.'}
+
+        $(git diff --staged --exit-code ||
+          { echo 'HAS_CHANGES=1' >> "$GITHUB_ENV"; })
+        ~~~~~~~~~
+        EOF
+
+    - uses: peter-evans/create-pull-request@v4
+      # Don't want 2 similar pr's open and don't want to commit changes from
+      # pr's merge commit.
+      if: github.event_name != 'pull_request'
+      with:
+        branch: pr/${{ github.ref_name }}/format
+        title: 'fmt: format files with prettier'
+        body: |
+          ~~~~~
+          ${{ steps.diff.outputs.files }}
+          ~~~~~
+        commit-message: 'fmt: format files with prettier'
+        delete-branch: true
+
+    - name: Confirm No Formatting Errors
+      if: env.HAS_CHANGES
+      run: echo '::error::Formatting errors detected, please reformat'; exit 1
+
+  docs:
+    needs: format
+    if: github.event_name != 'push' || !github.event.deleted
+    runs-on: ubuntu-latest
+    env:
+      npm_config_engine_strict: true
+    steps:
+    - uses: actions/checkout@v3
+
+    - uses: actions/setup-node@v3
+      with:
+        node-version-file: package.json
+        check-latest: true
+
+    - run: npm ci
+    - run: npm run build-docs
+
+    - name: Log Summary/Diff
+      id: diff
+      run: |
+        git add -A
+        files="$(git diff --staged --name-status)"
+        delim="$RANDOM"
+        printf '%s\n%s\n%s\n' "files<<$delim" "$files" "$delim" >> "$GITHUB_OUTPUT"
+
+        cat >> "$GITHUB_STEP_SUMMARY" <<-EOF
+        # Diff
+
+        ~~~~~~~~~diff
+        ${files:-'No changes.'}
+
+        $(git diff --staged --exit-code ||
+          { echo 'HAS_CHANGES=1' >> "$GITHUB_ENV"; })
+        ~~~~~~~~~
+        EOF
+
+    - uses: peter-evans/create-pull-request@v4
+      if: github.event_name != 'pull_request'
+      with:
+        branch: pr/${{ github.ref_name }}/docs
+        title: 'docs: build docs'
+        body: |
+          ~~~~~
+          ${{ steps.diff.outputs.files }}
+          ~~~~~
+        commit-message: 'docs: build docs'
+        delete-branch: true
+
+    - name: Confirm Docs Are Up-To-Date
+      if: env.HAS_CHANGES
+      run: echo '::error::Outdated docs, please rebuild'; exit 1
