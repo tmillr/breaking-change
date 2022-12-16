@@ -29,6 +29,7 @@ const toMarkdownTable = (tbl) =>
               .toString()
               .replace(/([\\]+)\|/gu, "$1$1|")
               .replace(/\|/gu, "\\|")
+              .trim()
           )
           .join(" | ")} |`
     )
@@ -63,9 +64,9 @@ ${usageFile
     for (const [key, val] of Object.entries(inputs))
       table.push([
         `\`${key}\``,
-        val.description?.trim() || "",
+        val.description || "",
         `\`${!!val.required}\``,
-        `\`${val.default || ""}\``,
+        val.default.toString() ? `\`${val.default}\`` : "",
       ]);
 
     return toMarkdownTable(table);
@@ -76,7 +77,7 @@ ${usageFile
     table.push(table[0].map((arr) => "---"));
 
     for (const [key, val] of Object.entries(outputs))
-      table.push([key, val.description || ""]);
+      table.push([`\`${key}\``, val.description || ""]);
 
     return toMarkdownTable(table);
   },
