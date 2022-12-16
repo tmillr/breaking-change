@@ -62,10 +62,10 @@ ${usageFile
 
     for (const [key, val] of Object.entries(inputs))
       table.push([
-        key,
-        val.description || "",
-        val.required || "",
-        val.default || "",
+        `\`${key}\``,
+        val.description?.trim() || "",
+        `\`${!!val.required}\``,
+        `\`${val.default || ""}\``,
       ]);
 
     return toMarkdownTable(table);
