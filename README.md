@@ -6,19 +6,37 @@ This GitHub action automatically detects breaking changes by scanning the messag
 
 ## Usage
 
-```yaml
-- name: Report Breaking Changes
-  uses: tmillr/breaking-change@v1
-  # Only trigger on push events occurring on your release branch
-  if: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
-  with:
-    # The token that will be used for posting the comments
-    token: ${{ github.token }}
-    # Issue and/or discussion # where breaking changes will be reported
-    issueNumber: 1
-```
+<!-- prettier-ignore-start -->
+~~~yaml
+      - name: Report Breaking Changes
+        uses: tmillr/breaking-change@v1
+        # Only trigger step on push events occurring on your release branch
+        if: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
+        with:
+          # The token to be used for posting the comments
+          token: ${{ github.token }}
+          # Issue and/or discussion number where breaking changes should be reported
+          issueNumber: 1
+          discussionNumber: 2
+~~~
+<!-- prettier-ignore-end -->
 
-See [action.yml](action.yml) for all possible inputs and outputs.
+### Inputs
+
+<!-- prettier-ignore-start -->
+| **Key** | **Description** | **Required** | **Default** |
+| --- | --- | --- | --- |
+| `token` | The token used for posting the comments (e.g. github.token). | `true` |  |
+| `issueNumber` | (integer) Issue to comment on for each breaking change commit found. May be combined with discussionNumber. | `false` |  |
+| `discussionNumber` | (integer) Discussion to comment on for each breaking change commit found. May be combined with issueNumber. | `false` |  |
+| `headerLevel` | (integer) Header level for the commit message title/subject (1-6, or false to disable header styling of commit title). | `false` | `3` |
+<!-- prettier-ignore-end -->
+
+### Outputs
+
+| **Key** | **Description**                                   |
+| ------- | ------------------------------------------------- |
+| `found` | (boolean) Whether a breaking change was detected. |
 
 ## Tips
 
