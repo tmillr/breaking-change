@@ -7,14 +7,14 @@ This GitHub action automatically detects breaking changes by scanning the messag
 ## Usage
 
 <!-- prettier-ignore-start -->
-
 <!-- @include usage -->
-
 <!-- prettier-ignore-end -->
 
 ### Inputs
 
+<!-- prettier-ignore-start -->
 <!-- @include inputsTable -->
+<!-- prettier-ignore-end -->
 
 ### Outputs
 
