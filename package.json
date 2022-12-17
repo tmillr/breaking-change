@@ -16,8 +16,7 @@
     "test": "bash \"scripts/test.sh\"",
     "format": "prettier -w .",
     "preversion": "git pull && npm ci && npm run build && npm t",
-    "version": "git add \"-A\"",
-    "release": "bash \"./scripts/version.sh\""
+    "version": "git add \"-A\""
   },
   "repository": {
     "type": "git",
@@ -38,7 +37,7 @@
     "c8": "7.12.0",
     "execa": "6.1.0",
     "prettier": "2.8.0",
-    "semver": "^7.3.8"
+    "semver": "7.3.8"
   },
   "volta": {
     "node": "16.19.0"
