@@ -12,6 +12,8 @@ EOF
 rm -d dist
 node scripts/fix-sourcemap-sources.js
 
-# Fix mixed line-endings. Commented-out because it ruins pre-existing
-# sourcemaps and I don't think prettier emits its own sourcemaps.
-# prettier -w index.js
+# Fix mixed line-endings in bundled/compiled output while emitting new
+# sourcemap to match
+terser index.js --timings -o index.js --config-file terser.json
+
+rm index.js.map

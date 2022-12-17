@@ -1,0 +1,8 @@
+{
+  "module": true,
+  "ecma": 2015,
+  "compress": false,
+  "mangle": false,
+  "sourceMap": { "url": "inline", "content": "index.js.map" },
+  "format": { "comments": "all" }
+}
