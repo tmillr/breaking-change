@@ -10,9 +10,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
     - env:
         NEW_TAG: ${{ github.event.release.tag_name }}
       run: |
+        set -x
+
         # Exit with error if the released tag is not semantic version tag
         npx --yes semver "$NEW_TAG" || exit 1
 
