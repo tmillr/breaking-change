@@ -1,6 +1,6 @@
 {
   "name": "breaking-change",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Automatically update an issue and/or discussion with breaking changes.",
   "author": "Tyler Miller",
   "license": "MIT",
