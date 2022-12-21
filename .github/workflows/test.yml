@@ -17,7 +17,7 @@ jobs:
         echo "NODE_VER=${NODE_VER}.0.0" >> "$GITHUB_ENV"
     - uses: actions/setup-node@v3
       with:
-        node-version: ${{ github.env.NODE_VER }}
+        node-version: ${{ env.NODE_VER }}
     - run: npm ci
     - run: npm run build --if-present
     - run: npm test
