@@ -7,7 +7,8 @@
   "main": "index.js",
   "type": "module",
   "engines": {
-    "node": "16"
+    "node": "16",
+    "npm": "~8.19.2"
   },
   "scripts": {
     "build-docs": "node \"scripts/build-docs.js\"",
