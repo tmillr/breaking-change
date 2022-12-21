@@ -11,13 +11,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - run: |
-        NODE_VER="$(grep -Eom 1 'using:.*node[[:digit:]]+' action.yml | grep -Eo '[[:digit:]]+$')"
-        [ ${#NODE_VER} -gt 0 ] || exit 1
-        echo "NODE_VER=${NODE_VER}.0.0" >> "$GITHUB_ENV"
+    - run: command -v volta
     - uses: actions/setup-node@v3
       with:
-        node-version: ${{ env.NODE_VER }}
+        node-version: 16.18.0
     - run: npm ci
     - run: npm run build --if-present
     - run: npm test
