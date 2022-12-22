@@ -10,8 +10,6 @@ jobs:
   format:
     if: github.event_name != 'push' || !github.event.deleted
     runs-on: ubuntu-latest
-    env:
-      npm_config_engine_strict: true
     steps:
     # NOTE: Be mindful of what gets checked-out for pr events!
     - uses: actions/checkout@v3
@@ -21,6 +19,7 @@ jobs:
         node-version-file: package.json
         check-latest: true
 
+    - run: npm i -g "npm@$(npm pkg get engines.npm | grep -Eom 1 '[^"]+')"
     - run: npm ci
     - run: npm run format
 
@@ -65,8 +64,6 @@ jobs:
     needs: format
     if: github.event_name != 'push' || !github.event.deleted
     runs-on: ubuntu-latest
-    env:
-      npm_config_engine_strict: true
     steps:
     - uses: actions/checkout@v3
 
@@ -75,6 +72,7 @@ jobs:
         node-version-file: package.json
         check-latest: true
 
+    - run: npm i -g "npm@$(npm pkg get engines.npm | grep -Eom 1 '[^"]+')"
     - run: npm ci
     - run: npm run build-docs
 
