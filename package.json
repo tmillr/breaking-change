@@ -8,7 +8,7 @@
   "type": "module",
   "engines": {
     "node": "^16.13.0",
-    "npm": "~8.19.2"
+    "npm": "~9.2.0"
   },
   "scripts": {
     "build-docs": "node \"scripts/build-docs.js\"",
