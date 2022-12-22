@@ -13,8 +13,7 @@ jobs:
     - uses: actions/checkout@v3
     - uses: actions/setup-node@v3
       with:
-        # All gh runners have at least this version of node16 preinstalled
-        node-version: 16.18.0
+        node-version: 16.13.0
     - run: npm ci
     - run: npm run build --if-present
     - run: npm test
