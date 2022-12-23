@@ -16,7 +16,11 @@
       "schedule": ["at any time"]
     }
   ],
-  "node": { "packageRules": [{ "allowedVersions": "^16.0.0" }] },
+  "node": {
+    "packageRules": [
+      { "matchPackageNames": ["node"], "allowedVersions": "^16.0.0" }
+    ]
+  },
   "assignees": ["tmillr"],
   "configMigration": true,
   "dependencyDashboard": true,
