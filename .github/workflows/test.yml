@@ -10,17 +10,36 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-node@v3
-      with:
-        node-version: 16.13.0
-    - run: npm i -g "npm@$(npm pkg get engines.npm | grep -Eom 1 '[^"]+')"
-    - run: npm ci --engine-strict=false
-    - run: npm run build --if-present
-    - run: npm test
-      env:
-        INPUT_TOKEN: ${{ github.token }}
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v3
-      with:
-        file: coverage/lcov.info
+      - uses: actions/checkout@v3
+
+      - run: npm i --no-save semver
+
+      - name: Get Node version from package.json
+        id: get_node_version
+        run: |
+          v="$(npm pkg get engines.node)"
+          v="$(node -p "require(\"semver/ranges/min-version\")($v)")"
+          echo "min_node_version=$v" >> "$GITHUB_OUTPUT"
+
+      - run: git reset --hard
+
+      - run: git clean -fx
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ steps.get_node_version.outputs.min_node_version }}
+
+      - run: npm i -g "npm@$(npm pkg get engines.npm | grep -Eom 1 '[^"]+')"
+
+      - run: npm ci --engine-strict=false
+
+      - run: npm run build --if-present
+
+      - run: npm test
+        env:
+          INPUT_TOKEN: ${{ github.token }}
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          file: coverage/lcov.info
