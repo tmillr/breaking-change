@@ -12,6 +12,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - run: npm i -g "npm@$(npm pkg get engines.npm | grep -Eom 1 '[^"]+')"
+
       - run: npm i --no-save semver
 
       - name: Get Node version from package.json
@@ -28,8 +30,6 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: ${{ steps.get_node_version.outputs.min_node_version }}
-
-      - run: npm i -g "npm@$(npm pkg get engines.npm | grep -Eom 1 '[^"]+')"
 
       - run: npm ci --engine-strict=false
 
