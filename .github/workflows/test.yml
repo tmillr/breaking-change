@@ -20,7 +20,7 @@ jobs:
         id: get_node_version
         run: |
           v="$(npm pkg get engines.node)"
-          v="$(node -p "require(\"semver/ranges/min-version\")($v)")"
+          v="$(node -p "require(\"semver/ranges/min-version\")($v).toString()")"
           echo "min_node_version=$v" >> "$GITHUB_OUTPUT"
 
       - run: git reset --hard
