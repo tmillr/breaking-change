@@ -7,11 +7,7 @@
       "stabilityDays": 3
     },
     {
-      "matchDepTypes": ["peerDependencies"],
-      "rangeStrategy": "auto"
-    },
-    {
-      "matchDepTypes": ["devDependencies"],
+      "matchDepTypes": ["dependencies", "devDependencies"],
       "rangeStrategy": "pin"
     },
     {
@@ -28,10 +24,7 @@
   "lockFileMaintenance": { "enabled": true },
   "platformCommit": true,
   "printConfig": true,
-  "rangeStrategy": "pin",
   "rollbackPrs": true,
-  "semanticCommitScope": "{{parentDir}}",
-  "semanticCommitType": "deps",
   "semanticCommits": "enabled",
   "timezone": "US/Pacific",
   "transitiveRemediation": true
