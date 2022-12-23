@@ -1,40 +1,40 @@
-name: 'Report Breaking Changes'
-author: 'Tyler Miller'
-description: 'Automatically update an issue and/or discussion with breaking changes.'
+name: Report Breaking Changes
+author: Tyler Miller
+description: Automatically update an issue and/or discussion with breaking changes.
 
 runs:
-  using: 'node16'
-  main: 'index.js'
+  using: node16
+  main: index.js
 branding:
-  icon: 'cast'
-  color: 'red'
+  icon: cast
+  color: red
 
 inputs:
   token:
-    description: The token used for posting the comments (e.g. github.token).
+    description: The token used for posting the comments (e.g. `github.token`).
     required: true
   issueNumber:
     description: >
-      (integer)
       Issue to comment on for each breaking change commit found.
-      May be combined with discussionNumber.
+      May be combined with `discussionNumber`.
+      (`integer`)
     required: false
     default: ''
   discussionNumber:
     description: >
-      (integer)
       Discussion to comment on for each breaking change commit found.
-      May be combined with issueNumber.
+      May be combined with `issueNumber`.
+      (`integer`)
     required: false
     default: ''
   headerLevel:
     description: >
-      (integer)
-      Header level for the commit message title/subject (1-6, or false to
+      Header level for the commit message title/subject (use `false` to
       disable header styling of commit title).
+      (`1|2|3|4|5|6|false`)
     required: false
-    default: '3'
+    default: 3
 
 outputs:
   found:
-    description: (boolean) Whether a breaking change was detected.
+    description: Whether a breaking change was detected. (`boolean`)
