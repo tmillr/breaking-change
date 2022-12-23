@@ -25,7 +25,7 @@ This GitHub action automatically detects breaking changes by scanning the messag
 
 <!-- prettier-ignore-start -->
 | **Key** | **Description** | **Required** | **Default** |
-| --- | --- | --- | --- |
+| --- | --- | :---: | :---: |
 | `token` | The token used for posting the comments (e.g. `github.token`). | `true` |  |
 | `issueNumber` | Issue to comment on for each breaking change commit found. May be combined with `discussionNumber`. (`integer`) | `false` |  |
 | `discussionNumber` | Discussion to comment on for each breaking change commit found. May be combined with `issueNumber`. (`integer`) | `false` |  |

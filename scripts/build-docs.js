@@ -59,7 +59,7 @@ ${usageFile
       ),
     ];
 
-    table.push(table[0].map((arr) => "---"));
+    table.push(table[0].map((arr, i) => (i < 2 ? "---" : ":---:")));
 
     for (const [key, val] of Object.entries(inputs))
       table.push([
