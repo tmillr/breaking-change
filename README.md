@@ -26,17 +26,17 @@ This GitHub action automatically detects breaking changes by scanning the messag
 <!-- prettier-ignore-start -->
 | **Key** | **Description** | **Required** | **Default** |
 | --- | --- | --- | --- |
-| `token` | The token used for posting the comments (e.g. github.token). | `true` |  |
-| `issueNumber` | (integer) Issue to comment on for each breaking change commit found. May be combined with discussionNumber. | `false` |  |
-| `discussionNumber` | (integer) Discussion to comment on for each breaking change commit found. May be combined with issueNumber. | `false` |  |
-| `headerLevel` | (integer) Header level for the commit message title/subject (1-6, or false to disable header styling of commit title). | `false` | `3` |
+| `token` | The token used for posting the comments (e.g. `github.token`). | `true` |  |
+| `issueNumber` | Issue to comment on for each breaking change commit found. May be combined with discussionNumber. (`integer`) | `false` |  |
+| `discussionNumber` | Discussion to comment on for each breaking change commit found. May be combined with issueNumber. (`integer`) | `false` |  |
+| `headerLevel` | Header level for the commit message title/subject (use `false` to disable header styling of commit title). (`1\|2\|3\|4\|5\|6\|false`) | `false` | `3` |
 <!-- prettier-ignore-end -->
 
 ### Outputs
 
-| **Key** | **Description**                                   |
-| ------- | ------------------------------------------------- |
-| `found` | (boolean) Whether a breaking change was detected. |
+| **Key** | **Description**                                     |
+| ------- | --------------------------------------------------- |
+| `found` | Whether a breaking change was detected. (`boolean`) |
 
 ## Tips
 
