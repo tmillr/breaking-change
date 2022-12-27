@@ -9,7 +9,7 @@ This GitHub action automatically detects breaking changes by scanning the messag
 <!-- prettier-ignore-start -->
 ~~~yaml
       - name: Report Breaking Changes
-        uses: tmillr/breaking-change@v1
+        uses: tmillr/breaking-change@v2
         # Only trigger step on push events occurring on your release branch
         if: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
         with:
