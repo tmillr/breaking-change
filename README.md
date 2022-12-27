@@ -26,7 +26,7 @@ This GitHub action automatically detects breaking changes by scanning the messag
 <!-- prettier-ignore-start -->
 | **Key** | **Description** | **Required** | **Default** |
 | --- | --- | :---: | :---: |
-| `token` | The token used for posting the comments (e.g. `github.token`). | `true` |  |
+| `token` | The token used for posting the comments. | `false` | `${{ github.token }}` |
 | `issueNumber` | Issue to comment on for each breaking change commit found. May be combined with `discussionNumber`. (`integer`) | `false` |  |
 | `discussionNumber` | Discussion to comment on for each breaking change commit found. May be combined with `issueNumber`. (`integer`) | `false` |  |
 | `headerLevel` | Header level for the commit message title/subject (use `false` to disable header styling of commit title). (`1\|2\|3\|4\|5\|6\|false`) | `false` | `3` |
