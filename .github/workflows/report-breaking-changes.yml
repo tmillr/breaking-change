@@ -1,0 +1,16 @@
+name: Report Breaking Changes
+
+on:
+  push:
+    branches:
+      - 'v[123456789]*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: tmillr/breaking-change@v1
+        with:
+          token: ${{ github.token }}
+          discussionNumber: 43
