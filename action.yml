@@ -11,8 +11,9 @@ branding:
 
 inputs:
   token:
-    description: The token used for posting the comments (e.g. `github.token`).
-    required: true
+    description: The token used for posting the comments.
+    required: false
+    default: ${{ github.token }}
   issueNumber:
     description: >
       Issue to comment on for each breaking change commit found.

@@ -19,7 +19,7 @@ export const filterFn = (msg) =>
 
 export function getOctokit(
   auth = core.getInput("token", {
-    required: true,
+    required: false,
     trimWhitespace: true,
   })
 ) {
