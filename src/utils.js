@@ -14,7 +14,8 @@ export function humanReadableTypeOf(obj) {
 
 /** Filters out non-breaking-change commits based on their message */
 export const filterFn = (msg) =>
-  /^[^:]+!:/u.test(msg.trim().split("\n")[0]) || /^\s*BREAKING/mu.test(msg);
+  /^[^:()]+(?:\([^()]*\))?!:/u.test(msg.trim().split("\n")[0]) ||
+  /^[ \t]*BREAKING([ \t]*|-)CHANGE[ \t]*:/mu.test(msg);
 
 export function getOctokit(
   auth = core.getInput("token", {
