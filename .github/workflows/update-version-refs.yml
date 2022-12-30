@@ -5,6 +5,9 @@ on:
   release:
     types: [ released ]
 
+env:
+  NEW_TAG: ${{ github.event.release.tag_name }}
+
 jobs:
   update-version-refs:
     runs-on: ubuntu-latest
@@ -12,19 +15,24 @@ jobs:
     - uses: actions/checkout@v3
       with:
         fetch-depth: 0
-    - env:
-        NEW_TAG: ${{ github.event.release.tag_name }}
-      run: |
-        set -x
 
-        # Exit with error if the released tag is not semantic version tag
+    - name: Confirm update to released tag is allowed
+      run: |
+        set -xu
+        
+        case "$NEW_TAG" in
+            [vV][123456789]*) : ;;
+            *) echo 'released tag doesn't match shell pattern "[vV][123456789]*"' >&2; exit 1 ;;
+        esac
+
+        # Exit with error if the released tag isn't a semantic version tag
         npx --yes semver "$NEW_TAG" || exit 1
 
         major="${NEW_TAG%%.*}"
         br="$(git ls-remote origin "refs/heads/$major")"
         update=true
 
-        # If version-tracking branch exists for $major...
+        # If version-tracking branch already exists for $major...
         if [ -n "$br" ]; then
           br_sha="${br%%[[:space:]]*}"
 
@@ -34,9 +42,32 @@ jobs:
             tag="${tag##*'refs/tags/'}"
             tag="${tag%%'^{'*}"
 
-            # Fails if invalid version or doesn't match range
+            # False if invalid version or doesn't match range
             if npx semver -r ">${NEW_TAG}" "$tag"; then update=false; break; fi
           done <<< "$(git ls-remote --tags origin | grep -E "$br_sha"'.*refs/tags/v?[[:digit:]]')"
         fi
 
-        "$update" && git push origin "refs/tags/${NEW_TAG}^{commit}:refs/heads/${major}"
+        echo "ref needs update: $update" >&2
+        "$update"
+
+    - name: Assert no `extraHeader` settings in Git Config
+      run: |
+        set -o nounset +o errexit
+        extraheaders="$(/usr/bin/git config --name-only --get-regexp 'http(\..+)?\.extraheader')"
+        code="$?"
+        case "$code" in
+            0 | 1) [ -z "$extraheaders" ] || exit 1 ;;
+            *) exit "$code" ;;
+        esac
+
+    - name: Update ref using `git push`
+      env:
+        TKN: 'AUTHORIZATION: basic ${{ secrets.pat }}'
+      run: |
+        set -o nounset +o errexit
+        /usr/bin/git \
+            --config-env='http.https://github.com/.extraheader=TKN' \
+            push \
+            --no-verify origin "refs/tags/${NEW_TAG}^{commit}:refs/heads/${NEW_TAG%%.*}"
+        code="$?"
+        unset TKN && exit "$code"
