@@ -42,7 +42,7 @@ jobs:
         ~~~~~~~~~
         EOF
 
-    - uses: peter-evans/create-pull-request@v4
+    - uses: peter-evans/create-pull-request@v5
       # Don't want 2 similar pr's open and don't want to commit changes from
       # pr's merge commit.
       if: github.event_name != 'pull_request'
@@ -95,7 +95,7 @@ jobs:
         ~~~~~~~~~
         EOF
 
-    - uses: peter-evans/create-pull-request@v4
+    - uses: peter-evans/create-pull-request@v5
       if: github.event_name != 'pull_request'
       with:
         branch: pr/${{ github.ref_name }}/docs
