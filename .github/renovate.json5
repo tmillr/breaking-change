@@ -1,36 +1,38 @@
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:base"],
-  "packageRules": [
+  $schema: "https://docs.renovatebot.com/renovate-schema.json",
+  extends: ["config:recommended"],
+  packageRules: [
     {
-      "matchDatasources": ["npm"],
-      "stabilityDays": 3
+      matchCategories: ["node"],
+      matchPackageNames: ["node"],
+      allowedVersions: "^16.0.0",
     },
     {
-      "matchDepTypes": ["dependencies", "devDependencies"],
-      "rangeStrategy": "pin"
+      matchDatasources: ["npm"],
+      minimumReleaseAge: "3 days",
     },
     {
-      "matchPackagePrefixes": ["@actions"],
-      "prPriority": 5,
-      "schedule": ["at any time"]
-    }
+      matchDepTypes: ["dependencies", "devDependencies"],
+      rangeStrategy: "pin",
+    },
+    {
+      matchPackagePrefixes: ["@actions"],
+      prPriority: 5,
+      schedule: ["at any time"],
+    },
   ],
-  "node": {
-    "packageRules": [
-      { "matchPackageNames": ["node"], "allowedVersions": "^16.0.0" }
-    ]
+  assignees: ["tmillr"],
+  configMigration: true,
+  dependencyDashboard: true,
+  dependencyDashboardLabels: ["dependencies"],
+  labels: ["dependencies"],
+  lockFileMaintenance: {
+    enabled: true,
   },
-  "assignees": ["tmillr"],
-  "configMigration": true,
-  "dependencyDashboard": true,
-  "dependencyDashboardLabels": ["dependencies"],
-  "labels": ["dependencies"],
-  "lockFileMaintenance": { "enabled": true },
-  "platformCommit": true,
-  "printConfig": true,
-  "rollbackPrs": true,
-  "semanticCommits": "enabled",
-  "timezone": "US/Pacific",
-  "transitiveRemediation": true
+  platformCommit: true,
+  printConfig: true,
+  rollbackPrs: true,
+  semanticCommits: "enabled",
+  timezone: "US/Pacific",
+  transitiveRemediation: true,
 }
