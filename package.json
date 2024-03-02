@@ -8,7 +8,7 @@
   "type": "module",
   "engines": {
     "node": "^16.13.0",
-    "npm": "~9.2.0"
+    "npm": "~9.9.0"
   },
   "scripts": {
     "build-docs": "node scripts/build-docs.js",
@@ -42,6 +42,6 @@
   },
   "volta": {
     "node": "16.19.0",
-    "npm": "9.2.0"
+    "npm": "9.9.3"
   }
 }
