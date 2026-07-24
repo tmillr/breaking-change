@@ -22,14 +22,14 @@ test.serial(
       repoOwner,
       repoName,
       issueNum,
-      "issue"
+      "issue",
     );
 
     t.log("id:", id);
     t.is(typeof id, "string");
     t.true(id.length > 0, "id length is 0!");
     issueId = id;
-  }
+  },
 );
 
 test.serial(
@@ -39,19 +39,19 @@ test.serial(
       repoOwner,
       repoName,
       discussionNum,
-      "discussion"
+      "discussion",
     );
 
     t.log("id:", id);
     t.is(typeof id, "string");
     t.true(id.length > 0, "id length is 0!");
     discussionId = id;
-  }
+  },
 );
 
 test.serial("addIssueComment()", async (t) => {
   const expectedUrl = new URL(
-    `https://github.com/${repoOwner}/${repoName}/issues/${issueNum}#issuecomment-`
+    `https://github.com/${repoOwner}/${repoName}/issues/${issueNum}#issuecomment-`,
   );
 
   let url = await octokit.addIssueComment(issueId, "test comment");
@@ -64,7 +64,7 @@ test.serial("addIssueComment()", async (t) => {
 
 test.serial("addDiscussionComment()", async (t) => {
   const expectedUrl = new URL(
-    `https://github.com/${repoOwner}/${repoName}/discussions/${discussionNum}#discussioncomment-`
+    `https://github.com/${repoOwner}/${repoName}/discussions/${discussionNum}#discussioncomment-`,
   );
 
   let url = await octokit.addDiscussionComment(discussionId, "test comment");
