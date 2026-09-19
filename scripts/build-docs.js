@@ -29,9 +29,9 @@ const toMarkdownTable = (tbl) =>
               .toString()
               .replace(/([\\]+)\|/gu, "$1$1|")
               .replace(/\|/gu, "\\|")
-              .trim()
+              .trim(),
           )
-          .join(" | ")} |`
+          .join(" | ")} |`,
     )
     .join("\n");
 
@@ -47,7 +47,7 @@ ${usageFile
         process.env.npm_package_version ||
         error("unable to get package version from env var $npm_package_version")
       ).match(/^.*?[1-9]/u)[0]
-    }`
+    }`,
   )
   .replace(/^\n+|\n+$/gu, "")}
 ~~~`,
@@ -55,7 +55,7 @@ ${usageFile
   inputsTable: () => {
     const table = [
       ["Key", "Description", "Required", "Default"].map(
-        (title) => `**${title}**`
+        (title) => `**${title}**`,
       ),
     ];
 
@@ -85,7 +85,7 @@ ${usageFile
 
 const readme = (await readFile("README_TEMPLATE.md", "utf8")).replace(
   /<!--.*?@include\s+(\S+).*?-->/gmu,
-  (m, p1) => snippets[p1]?.() || error("unrecognized @include directive: " + m)
+  (m, p1) => snippets[p1]?.() || error("unrecognized @include directive: " + m),
 );
 
 await writeFile(
@@ -95,5 +95,5 @@ await writeFile(
     ...(await prettier.resolveConfig(readmeFilePath, {
       useCache: false,
     })),
-  })
+  }),
 );
