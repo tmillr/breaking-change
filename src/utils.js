@@ -21,7 +21,7 @@ export function getOctokit(
   auth = core.getInput("token", {
     required: false,
     trimWhitespace: true,
-  })
+  }),
 ) {
   const methods = {
     getIssueOrDiscussionId: (() => {
@@ -44,7 +44,7 @@ export function getOctokit(
                 }
               }
 `,
-            { owner: repoOwner, name: repoName, number }
+            { owner: repoOwner, name: repoName, number },
           )
         ).repository[which].id);
       };
@@ -67,7 +67,7 @@ export function getOctokit(
               }
             }
 `,
-          { input: { subjectId: issueId, body: comment } }
+          { input: { subjectId: issueId, body: comment } },
         )
       ).addComment.commentEdge.node.url;
     },
@@ -89,7 +89,7 @@ export function getOctokit(
               body: comment,
               discussionId,
             },
-          }
+          },
         )
       ).addDiscussionComment.comment.url;
     },
