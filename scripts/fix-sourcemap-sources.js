@@ -7,10 +7,10 @@ json.sources = json.sources.map((path) =>
   path.replace(
     new RegExp(
       `^(?:\\.\\.?[\\\\/])*webpack:[\\\\/]*(?:breaking-change[\\\\/])?`,
-      "u"
+      "u",
     ),
-    ""
-  )
+    "",
+  ),
 );
 
 await writeFile(file, JSON.stringify(json));
