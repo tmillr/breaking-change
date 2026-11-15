@@ -32,8 +32,8 @@ try {
     assert(
       Array.isArray(ret),
       `"commits" field of event payload is the wrong type: expected "Array", found "${humanReadableTypeOf(
-        ret
-      )}"`
+        ret,
+      )}"`,
     );
 
     return ret.filter((cm) => filterFn(cm.message));
@@ -58,13 +58,13 @@ try {
 
   assert(
     inputWasProvided(issueNumber) || inputWasProvided(discussionNumber),
-    'missing input: one or both of "discussionNumber" or "issueNumber" must be provided'
+    'missing input: one or both of "discussionNumber" or "issueNumber" must be provided',
   );
 
   if (inputWasProvided(issueNumber)) {
     assert(
       /^\d+$/.test(issueNumber),
-      'invalid input provided for "issueNumber": not a valid integer'
+      'invalid input provided for "issueNumber": not a valid integer',
     );
 
     issueNumber = parseInt(issueNumber, 10);
@@ -74,8 +74,8 @@ try {
     assert(
       /^\d+$/.test(
         discussionNumber,
-        'invalid input provided for "discussionNumber": not a valid integer'
-      )
+        'invalid input provided for "discussionNumber": not a valid integer',
+      ),
     );
 
     discussionNumber = parseInt(discussionNumber, 10);
@@ -90,7 +90,7 @@ try {
   } else {
     assert(
       /^[123456]$/.test(headerLevel),
-      `invalid input provided for "headerLevel": expected an integer between 1 and 6 inclusive, or "false"`
+      `invalid input provided for "headerLevel": expected an integer between 1 and 6 inclusive, or "false"`,
     );
 
     commitTitlePrefix = "#".repeat(parseInt(headerLevel, 10)) + " ";
@@ -109,7 +109,7 @@ try {
     if (typeof issueNumber == "number")
       await octokit.addIssueComment(
         await octokit.getIssueOrDiscussionId(owner, name, issueNumber, "issue"),
-        body
+        body,
       );
 
     if (typeof discussionNumber == "number")
@@ -118,9 +118,9 @@ try {
           owner,
           name,
           discussionNumber,
-          "discussion"
+          "discussion",
         ),
-        body
+        body,
       );
   }
 } catch (e) {

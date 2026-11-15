@@ -67,7 +67,7 @@ test.before(async (t) => {
             GITHUB_EVENT_NAME: ctx.event,
             ...this.resolveInputs(ctx.inputs),
           },
-        }
+        },
       );
     }
   }
@@ -75,7 +75,7 @@ test.before(async (t) => {
   Harness.actionYAML = yaml.load(await readFile("action.yml", "utf8"));
 
   tmpDir = await mkdtemp(
-    os.tmpdir().replace(new RegExp(`${path.sep}+$`, "u"), "") + path.sep + "bc"
+    os.tmpdir().replace(new RegExp(`${path.sep}+$`, "u"), "") + path.sep + "bc",
   );
 
   t.context.defaultHarness = new Harness({
@@ -94,7 +94,7 @@ test.after.always("cleanup: remove temp dir", async (t) => {
 
 test("smoke test: encounters no errors and exits zero/cleanly", async (t) => {
   await t.notThrowsAsync(
-    t.context.defaultHarness.run({ inputs: { issueNumber: testIssue } })
+    t.context.defaultHarness.run({ inputs: { issueNumber: testIssue } }),
   );
 });
 
@@ -108,13 +108,13 @@ test(`if event != "push": don't error but quickly bail/exit 0 and print warning`
     t.context.defaultHarness.run({
       event: "release",
       payload: { action: "created" },
-    })
+    }),
   );
 
   const result = await promise;
 
   t.regex(
     result.stdout,
-    /^\s*::\s*warning.*(?:title=|::)\s*unsupported\s*event/iu
+    /^\s*::\s*warning.*(?:title=|::)\s*unsupported\s*event/iu,
   );
 });
